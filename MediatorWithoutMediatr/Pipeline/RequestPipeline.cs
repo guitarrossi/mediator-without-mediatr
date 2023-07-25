@@ -2,19 +2,19 @@
 using MediatorWithoutMediatr.Commom;
 using System.ComponentModel.DataAnnotations;
 
-namespace MediatorWithoutMediatr.UseCases.Course.Create
+namespace MediatorWithoutMediatr.Pipeline
 {
-    public class CreateUserPipeline
+    public class RequestPipeline
     {
         private readonly IServiceProvider _serviceProvider;
-        public CreateUserPipeline(IServiceProvider serviceProvider)
+        public RequestPipeline(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
         }
 
         public async Task<TResponse> Pipe<TRequest, TResponse>(TRequest request, Func<TRequest, CancellationToken, Task<TResponse>> handler,
-          CancellationToken cancellationToken = default  
-          ) where TRequest : class 
+          CancellationToken cancellationToken = default
+          ) where TRequest : class
             where TResponse : Response
         {
             var validator = _serviceProvider.GetService<IValidator<TRequest>>();

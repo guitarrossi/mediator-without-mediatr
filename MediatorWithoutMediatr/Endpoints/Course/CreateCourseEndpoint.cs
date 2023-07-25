@@ -1,4 +1,5 @@
-﻿using MediatorWithoutMediatr.UseCases.Course.Create;
+﻿using MediatorWithoutMediatr.Pipeline;
+using MediatorWithoutMediatr.UseCases.Course.Create;
 using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace MediatorWithoutMediatr.Endpoints.Course
@@ -8,7 +9,7 @@ namespace MediatorWithoutMediatr.Endpoints.Course
 
         public static void RegisterCreateCourseEndpoint(this WebApplication app)
         {
-            app.MapPost("/course", async (CreateCourse createCourse, CreateCourseHandler createCourseHandler, CreateUserPipeline pipe, CancellationToken ct) =>
+            app.MapPost("/course", async (CreateCourse createCourse, CreateCourseHandler createCourseHandler, RequestPipeline pipe, CancellationToken ct) =>
             {
                 var response = await pipe.Pipe(createCourse, createCourseHandler.Handle, ct);
 

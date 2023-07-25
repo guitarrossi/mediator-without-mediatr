@@ -2,10 +2,13 @@
 using MediatorWithoutMediatr.Commom;
 using MediatorWithoutMediatr.Interfaces;
 using MediatorWithoutMediatr.Mapper;
+using MediatorWithoutMediatr.Notifications.Base;
+using MediatorWithoutMediatr.Notifications.User;
+using MediatorWithoutMediatr.UseCases.Base;
 
 namespace MediatorWithoutMediatr.UseCases.Course.Create
 {
-    public record CreateCourse(string Name, string Description, DateTime InitialDate)
+    public record CreateCourse(string Name, string Description, DateTime InitialDate) : IUseCase
     {
     }
 
@@ -23,7 +26,7 @@ namespace MediatorWithoutMediatr.UseCases.Course.Create
         }
     }
 
-    public class CreateCourseHandler
+    public class CreateCourseHandler : IHandler<CreateCourse>
     {
         private readonly ICourseRepository _courseRepository;
 
@@ -32,13 +35,14 @@ namespace MediatorWithoutMediatr.UseCases.Course.Create
             _courseRepository = courseRepository;
         }
 
-        public Task<Response> Handle(CreateCourse createCourse, CancellationToken ct)
+        public async Task<Response> Handle(CreateCourse request, CancellationToken cancellationToken)
         {
-            var course = createCourse.MapToCourse();
+            var course = request.MapToCourse();
 
             _courseRepository.Add(course);
 
-            return Task.FromResult(new Response(course));
+            return new Response(course);
         }
+
     }
 }
